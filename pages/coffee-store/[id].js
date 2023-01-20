@@ -7,16 +7,17 @@ import cls from 'classNames';
 import coffeeStoresData from '../../data/coffee-stores.json';
 
 import styles from '../../styles/coffee-stores.module.css';
-import {fetchCoffeeStores} from '../../lib/coffee-stores';
+import { fetchCoffeeStores } from '../../lib/coffee-stores';
 
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
   const coffeeStores = await fetchCoffeeStores();
+  console.log('params', staticProps);
 
   return {
     props: {
       coffeeStore: coffeeStores.find(coffeeStore => {
-        return coffeeStore.fsq_id.toString() === params.id
+        return coffeeStore.fsq_id.toString() === params.id;
       })
     }
   }
@@ -39,6 +40,8 @@ export async function getStaticPaths() {
 
 const CoffeeStore = (props) => {
   const router = useRouter();
+
+  const id = router.id
 
   if (router.isFallback) {
     return <div>
@@ -68,7 +71,10 @@ const CoffeeStore = (props) => {
             <h1 className={styles.name}>{name}</h1>
           </div>
           <Image
-            src={imgUrl}
+            src={
+              imgUrl ||
+              "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+            }
             width={600}
             height={360}
             className={styles.storeImg}
